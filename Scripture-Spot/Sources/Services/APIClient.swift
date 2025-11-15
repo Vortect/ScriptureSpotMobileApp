@@ -41,7 +41,7 @@ struct APIConfiguration {
 }
 
 final class APIClient {
-    static let shared = APIClient()
+    nonisolated(unsafe) static let shared = APIClient()
 
     private let session: URLSession
     private let configuration: APIConfiguration

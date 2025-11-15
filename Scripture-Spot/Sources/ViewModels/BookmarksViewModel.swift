@@ -26,8 +26,9 @@ final class BookmarksViewModel: ObservableObject {
             groups = group(response.bookmarks)
         } catch let apiError as APIError {
             error = apiError
-        } catch {
-            error = .unknown(error)
+        } catch let underlyingError {
+            let unknownErr = APIError.unknown(underlyingError)
+            self.error = unknownErr
         }
     }
 

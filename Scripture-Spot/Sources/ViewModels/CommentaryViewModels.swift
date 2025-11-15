@@ -18,8 +18,8 @@ final class CommentatorsViewModel: ObservableObject {
             authors = try await client.fetchAuthors()
         } catch let apiError as APIError {
             error = apiError
-        } catch {
-            error = .unknown(error)
+        } catch let underlyingError {
+            error = APIError.unknown(underlyingError)
         }
     }
 }

@@ -44,8 +44,8 @@ final class VerseDetailViewModel: ObservableObject {
             commentaryCount = commentaries.count
         } catch let apiError as APIError {
             error = apiError
-        } catch {
-            error = .unknown(error)
+        } catch let underlyingError {
+            error = APIError.unknown(underlyingError)
         }
     }
 

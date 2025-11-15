@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 struct HTMLText: View {
     let htmlString: String

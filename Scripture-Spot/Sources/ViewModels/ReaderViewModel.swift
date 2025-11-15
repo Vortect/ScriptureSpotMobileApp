@@ -21,8 +21,8 @@ final class ReaderViewModel: ObservableObject {
             self.chapter = try await client.fetchReaderChapter(author: author, book: book, chapter: chapter)
         } catch let apiError as APIError {
             error = apiError
-        } catch {
-            error = .unknown(error)
+        } catch let underlyingError {
+            error = APIError.unknown(underlyingError)
         }
     }
 }
