@@ -59,7 +59,7 @@ struct BookmarkDisplay: Identifiable, Codable {
     let bookChapter: String?
 }
 
-struct BookmarkGroup: Codable, Hashable, Identifiable {
+struct BookmarkGroup: Codable, Identifiable {
     let monthYear: String
     let displayName: String
     let bookmarks: [BookmarkDisplay]

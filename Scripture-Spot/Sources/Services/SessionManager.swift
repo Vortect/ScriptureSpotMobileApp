@@ -1,15 +1,15 @@
 import Combine
 import Foundation
 
-@MainActor
 final class SessionManager: ObservableObject {
-    static let shared = SessionManager()
+    nonisolated(unsafe) static let shared = SessionManager()
 
     @Published private(set) var currentToken: String?
     @Published private(set) var isAuthenticated = false
 
     private init() {}
 
+    @MainActor
     func loadPersistedSession() {
         if let token = KeychainWrapper.shared.retrieveToken() {
             currentToken = token
@@ -17,6 +17,7 @@ final class SessionManager: ObservableObject {
         }
     }
 
+    @MainActor
     func handleCallback(url: URL) {
         // TODO: Exchange Clerk callback for JWT once backend flow is finalized
         // For now we simply simulate a successful sign in to unblock development
@@ -26,6 +27,7 @@ final class SessionManager: ObservableObject {
         KeychainWrapper.shared.store(token: simulatedToken)
     }
 
+    @MainActor
     func signOut() {
         currentToken = nil
         isAuthenticated = false

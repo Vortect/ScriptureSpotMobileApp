@@ -46,7 +46,7 @@ struct AuthorContributor: Codable, Hashable, Identifiable {
     let role: String?
 }
 
-struct Author: Codable, Identifiable {
+struct Author: Codable, Hashable, Identifiable {
     let id: String
     let name: String
     let nicknameOrTitle: String?

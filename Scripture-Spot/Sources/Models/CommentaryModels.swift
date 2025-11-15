@@ -50,7 +50,7 @@ struct Commentary: Codable, Identifiable {
     let excerpts: [CommentaryExcerpt]?
 }
 
-struct CommentaryGroup: Identifiable, Hashable {
+struct CommentaryGroup: Identifiable {
     let id = UUID()
     let verse: Int
     let commentaries: [Commentary]

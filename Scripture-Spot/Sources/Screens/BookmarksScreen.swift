@@ -40,7 +40,7 @@ struct BookmarksScreen: View {
 
     private func reload() async {
         if !sessionManager.isAuthenticated {
-            sessionManager.loadPersistedSession()
+            await sessionManager.loadPersistedSession()
         }
         if let token = sessionManager.currentToken {
             await viewModel.loadBookmarks(token: token)
