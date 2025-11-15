@@ -14,14 +14,13 @@ struct HTMLText: View {
 
     private func attributedString(from html: String) -> AttributedString? {
         guard let data = html.data(using: .utf8) else { return nil }
-        do {
-            return try AttributedString(
-                data: data,
-                options: [.documentType: NSAttributedString.DocumentType.html],
-                documentAttributes: nil
-            )
-        } catch {
+        let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+            .documentType: NSAttributedString.DocumentType.html,
+            .characterEncoding: String.Encoding.utf8.rawValue
+        ]
+        guard let nsAttributed = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else {
             return nil
         }
+        return try? AttributedString(nsAttributed)
     }
 }

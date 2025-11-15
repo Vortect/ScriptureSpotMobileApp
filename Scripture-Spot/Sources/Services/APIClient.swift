@@ -41,7 +41,7 @@ struct APIConfiguration {
 }
 
 final class APIClient {
-    nonisolated(unsafe) static let shared = APIClient()
+    static let shared = APIClient()
 
     private let session: URLSession
     private let configuration: APIConfiguration
@@ -55,11 +55,11 @@ final class APIClient {
         self.sessionManager = sessionManager
     }
 
-    func send<T: Decodable, Body: Encodable>(
+    func send<T: Decodable>(
         _ path: String,
         method: HTTPMethod = .get,
         query: [URLQueryItem]? = nil,
-        body: Body? = nil,
+        body: (any Encodable)? = nil,
         headers: [String: String] = [:],
         decoder: JSONDecoder = JSONDecoder()
     ) async throws -> T {
@@ -76,7 +76,8 @@ final class APIClient {
         mergedHeaders.forEach { request.setValue($1, forHTTPHeaderField: $0) }
 
         if let body = body {
-            request.httpBody = try JSONEncoder().encode(body)
+            let boxed = AnyEncodable(body)
+            request.httpBody = try JSONEncoder().encode(boxed)
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         }
 
@@ -288,6 +289,20 @@ extension APIClient {
 }
 
 private struct EmptyResponse: Codable {}
+
+private struct AnyEncodable: Encodable {
+    private let encoder: (Encoder) throws -> Void
+
+    init<T: Encodable>(_ value: T) {
+        self.encoder = { enc in
+            try value.encode(to: enc)
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        try self.encoder(encoder)
+    }
+}
 
 private extension Encodable {
     var queryItems: [URLQueryItem] {
